@@ -44,11 +44,14 @@ interface ThemeMeta {
 const THEME_META: Record<ThemeId, ThemeMeta> = {
   'КИТАЙ':  { icon: '中', label: 'КИТАЙ', sample: '丿乃乂乄乆丱丼乀乁乊丮乑乕乏…', expansion: 0.7, group: 'texts' },
   'PATER':  { icon: '✝', label: 'PATER', sample: 'Quod servus et sanctus enim…', expansion: 9.1, group: 'texts' },
+  'ПУШКИН': { icon: '🪶', label: 'ПУШКИН', sample: 'Заря и ветер. Словно песня…', expansion: 9.4, group: 'texts' },
   'БОЖЕ':   { icon: '☦', label: 'БОЖЕ', sample: 'Раб да святой яко Господь убо…', expansion: 8.8, group: 'texts' },
   'РОССИЯ': { icon: '🇷🇺', label: 'РОССИЯ', sample: '🏆 Так победим! Россия вперёд…', expansion: 7.9, group: 'phrases' },
   'СССР':   { icon: '☭', label: 'СССР', sample: '🚩 Слава КПСС! Вперёд к…', expansion: 9.2, group: 'phrases' },
   'БУХАЮ':  { icon: '🍺', label: 'БУХАЮ', sample: 'ну блин ваще ладно короче…', expansion: 11.8, group: 'phrases' },
   'TRUMP':  { icon: '🇺🇸', label: 'TRUMP', sample: 'INCREDIBLE! SO TRUE! AMAZING!…', expansion: 23, group: 'phrases' },
+  'CYBER':  { icon: '🕶️', label: 'CYBER', sample: 'NEON GRID OVERCLOCK NEXUS…', expansion: 13, group: 'phrases' },
+  'MEME':   { icon: '😂', label: 'MEME', sample: 'лол это база рофл жиза…', expansion: 12.5, group: 'phrases' },
   '🙂':     { icon: '🙂', label: 'Эмодзи', sample: '😀🎭🌺🔮🎪🌈🦋🎨🌸…', expansion: 1.6, group: 'symbols' },
   'hex':    { icon: '0x', label: 'hex', sample: 'a1f3c70e8b2d…', expansion: 2, group: 'symbols' },
 };

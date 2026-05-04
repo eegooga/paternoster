@@ -14,7 +14,7 @@ The whole thing ships as one HTML file. No server, no accounts, no dependencies.
 
 ## Themes
 
-**БОЖЕ** Church Slavonic · **РОССИЯ** patriotic slogans · **СССР** Soviet agitprop · **БУХАЮ** drunk profanity · **TRUMP** MAGA rally · **PATER** Latin ecclesiastical · **КИТАЙ** CJK ideographs · **🙂** emoji · **hex** plain hexadecimal
+**БОЖЕ** Church Slavonic · **ПУШКИН** Russian poetic diction · **РОССИЯ** patriotic slogans · **СССР** Soviet agitprop · **БУХАЮ** drunk profanity · **TRUMP** MAGA rally · **CYBER** cyberpunk signal-noise · **MEME** meme slang stream · **PATER** Latin ecclesiastical · **КИТАЙ** CJK ideographs · **🙂** emoji · **hex** plain hexadecimal
 
 ## Build & develop
 
