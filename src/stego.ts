@@ -262,7 +262,6 @@ function encoder16384(b: Uint8Array, tab: Theme): string {
   const connectors = [...tab.tab1!, ...tab.tab2!, ...tab.tab3!, ...tab.tab4!];
   const words = tab.words!.split(' ');
   let o = '';
-  let first = true;
 
   for (let i = 0; i < padded.length; i += 7) {
     const chunk = ((BigInt(padded[i]) << 48n) | (BigInt(padded[i + 1]) << 40n) | (BigInt(padded[i + 2]) << 32n)
@@ -272,8 +271,7 @@ function encoder16384(b: Uint8Array, tab: Theme): string {
     const t3 = Number((chunk >> 14n) & 0x3FFFn);
     const t4 = Number(chunk & 0x3FFFn);
     for (const t of [t1, t2, t3, t4]) {
-      if (first) { o += words[t & 0xFF][0].toUpperCase() + words[t & 0xFF].slice(1); first = false; }
-      else o += connectors[(t >> 8) & 0x3F] + words[t & 0xFF];
+      o += connectors[(t >> 8) & 0x3F] + words[t & 0xFF];
     }
   }
   return o;
@@ -288,7 +286,7 @@ function decoder16384(s: string, tab: Theme): Uint8Array | null {
   for (let i = 0; i < words.length; i++) wordLookup.set(words[i], i);
 
   const tokens14: number[] = [];
-  let pending = -1; let first = true;
+  let pending = -1;
   for (const raw of s.split(/\s+/)) {
     const clean = raw.replace(/^[.,;:!?—–\-]+|[.,;:!?—–\-]+$/g, '');
     if (!clean) continue;
@@ -297,8 +295,9 @@ function decoder16384(s: string, tab: Theme): Uint8Array | null {
     let wi = wordLookup.get(clean);
     if (wi === undefined && clean.length) wi = wordLookup.get(clean[0].toLowerCase() + clean.slice(1));
     if (wi === undefined) break;
-    if (first) { tokens14.push(wi); first = false; }
-    else { if (pending < 0) return null; tokens14.push((pending << 8) | wi); pending = -1; }
+    if (pending < 0) return null;
+    tokens14.push((pending << 8) | wi);
+    pending = -1;
   }
 
   if (tokens14.length === 0 || tokens14.length % 4 !== 0) return null;
