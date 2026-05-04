@@ -7,6 +7,33 @@ on:
     branches: [main]
 
 jobs:
+  build-index-html:
+    name: Build dist/index.html
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify dist/index.html exists
+        run: test -f dist/index.html
+
+      - name: Upload dist/index.html artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paternoster-index-html
+          path: dist/index.html
+          retention-days: 14
+
   unit-tests:
     name: Unit & Integration Tests
     runs-on: ubuntu-latest
