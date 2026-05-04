@@ -49,6 +49,8 @@ const THEME_META: Record<ThemeId, ThemeMeta> = {
   'СССР':   { icon: '☭', label: 'СССР', sample: '🚩 Слава КПСС! Вперёд к…', expansion: 9.2, group: 'phrases' },
   'БУХАЮ':  { icon: '🍺', label: 'БУХАЮ', sample: 'ну блин ваще ладно короче…', expansion: 11.8, group: 'phrases' },
   'TRUMP':  { icon: '🇺🇸', label: 'TRUMP', sample: 'INCREDIBLE! SO TRUE! AMAZING!…', expansion: 23, group: 'phrases' },
+  'CYBER':  { icon: '🕶️', label: 'CYBER', sample: 'NEON GRID OVERCLOCK NEXUS…', expansion: 13, group: 'phrases' },
+  'MEME':   { icon: '😂', label: 'MEME', sample: 'лол это база рофл жиза…', expansion: 12.5, group: 'phrases' },
   '🙂':     { icon: '🙂', label: 'Эмодзи', sample: '😀🎭🌺🔮🎪🌈🦋🎨🌸…', expansion: 1.6, group: 'symbols' },
   'hex':    { icon: '0x', label: 'hex', sample: 'a1f3c70e8b2d…', expansion: 2, group: 'symbols' },
 };

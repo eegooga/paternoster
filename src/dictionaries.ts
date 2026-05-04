@@ -1,6 +1,6 @@
 /** Theme definitions for steganographic encoding. */
 
-export type ThemeId = 'БОЖЕ' | 'РОССИЯ' | 'СССР' | 'БУХАЮ' | 'КИТАЙ' | 'hex' | 'PATER' | '🙂' | 'TRUMP';
+export type ThemeId = 'БОЖЕ' | 'РОССИЯ' | 'СССР' | 'БУХАЮ' | 'КИТАЙ' | 'hex' | 'PATER' | '🙂' | 'TRUMP' | 'CYBER' | 'MEME';
 
 export interface Theme {
   readonly id: ThemeId;
@@ -145,6 +145,43 @@ const TRUMP: Theme = {
   ],
 } as const;
 
+const CYBER: Theme = {
+  id: 'CYBER',
+  model: 16,
+  rand: 0.55,
+  lang: 'en-US',
+  tab1: [
+    'NEON ', 'GLITCH ', 'NEXUS ', 'BYTE ', 'SYNTH ',
+    'PROXY ', 'QUANT ', 'DRONE ', 'GRID ', 'PULSE ',
+    'CIPHER ', 'PHANTOM ', 'VOID ', 'NODE ', 'NANO ',
+    'SPARK ',
+  ],
+  tab2: [
+    'OVERCLOCK ', 'DARKNET ', 'ICEWALL ', 'SKYLINE ', 'AUGMENT ',
+    'BACKDOOR ', 'DECRYPT ', 'DATAVAULT ', 'GHOSTRUN ', 'BLACKBOX ',
+    'HYPERLINK ', 'MEGACITY ', 'NIGHTCORE ', 'NANOWIRE ', 'UPLINK ',
+    'ZERODAY ',
+  ],
+} as const;
+
+const MEME: Theme = {
+  id: 'MEME',
+  model: 16,
+  rand: 0.45,
+  tab1: [
+    'лол ', 'кек ', 'мем ', 'ору ', 'жиза ',
+    'кринж ', 'имба ', 'вайб ', 'рофл ', 'сигма ',
+    'база ', 'пушка ', 'чел ', 'шок ', 'флекс ',
+    'тильт ',
+  ],
+  tab2: [
+    'это база ', 'чистый рофл ', 'ну это мем ', 'аоао ', 'жесткий вайб ',
+    'без негатива ', 'легендарно ', 'минус вайб ', 'не вывез ', 'поставил лайк ',
+    'топ контент ', 'скипнуть нельзя ', 'сюжетный поворот ', 'эмоциональный урон ', 'мозг сломан ',
+    'абсолютная классика ',
+  ],
+} as const;
+
 const PATER: Theme = {
   id: 'PATER',
   model: 4096,
@@ -240,7 +277,7 @@ const HEX: Theme = {
 } as const;
 
 /** All themes in detection priority order (hex MUST be last). */
-export const THEMES: readonly Theme[] = [KITAY, PATER, BOZHE, BUKHAYU, TRUMP, ROSSIYA, SSSR, EMOJI, HEX] as const;
+export const THEMES: readonly Theme[] = [KITAY, PATER, BOZHE, BUKHAYU, TRUMP, CYBER, MEME, ROSSIYA, SSSR, EMOJI, HEX] as const;
 
 /** Theme lookup by ID. */
 export const THEME_MAP: ReadonlyMap<ThemeId, Theme> = new Map(THEMES.map(t => [t.id, t]));
