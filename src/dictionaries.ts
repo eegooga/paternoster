@@ -22,9 +22,9 @@ export interface Theme {
 
 
 
-function makeWords16x16(prefixes: readonly string[], roots: readonly string[]): string {
+function makeWords16x16(prefixes: readonly string[], roots: readonly string[], joiner = ''): string {
   const out: string[] = [];
-  for (const p of prefixes) for (const r of roots) out.push(`${p}-${r}`);
+  for (const p of prefixes) for (const r of roots) out.push(`${p}${joiner}${r}`);
   return out.join(' ');
 }
 
