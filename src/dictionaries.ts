@@ -1,23 +1,99 @@
 /** Theme definitions for steganographic encoding. */
 
-export type ThemeId = 'БОЖЕ' | 'РОССИЯ' | 'СССР' | 'БУХАЮ' | 'КИТАЙ' | 'hex' | 'PATER' | '🙂' | 'TRUMP' | 'CYBER' | 'MEME' | 'ПУШКИН';
+export type ThemeId = 'БОЖЕ' | 'РОССИЯ' | 'СССР' | 'БУХАЮ' | 'КИТАЙ' | 'hex' | 'PATER' | '🙂' | 'TRUMP' | 'CYBER' | 'MEME' | 'ПУШКИН' | 'ГОРОД' | 'РАБОТА' | 'ДОМ' | 'ПУТЕШЕСТВИЕ' | 'ПОГОДА' | 'КУЛИНАРИЯ' | 'НАРРАТИВ';
 
 export interface Theme {
   readonly id: ThemeId;
-  readonly model: 0 | 16 | 64 | 1024 | 4096;
+  readonly model: 0 | 16 | 64 | 1024 | 4096 | 16384;
   readonly rand: number;
   readonly tab1?: readonly string[];
   readonly tab2?: readonly string[];
   readonly tab3?: readonly string[];
+  readonly tab4?: readonly string[];
   readonly base?: number;
   /** model-1024: string of 1024 characters, one per token. */
   readonly chars?: string;
-  /** model-4096 structured mode: 256 space-delimited words. */
+  /** model-4096/16384 structured modes: 256 space-delimited words. */
   readonly words?: string;
   readonly sep?: readonly string[];
   /** TTS language code (default: 'ru-RU') */
   readonly lang?: string;
 }
+
+
+
+function makeWords16x16(prefixes: readonly string[], roots: readonly string[]): string {
+  const out: string[] = [];
+  for (const p of prefixes) for (const r of roots) out.push(`${p}-${r}`);
+  return out.join(' ');
+}
+
+const RU_TAB1 = [' и ', ' а ', ' но ', ' да ', ' потом ', ' также ', ' снова ', ' ещё '] as const;
+const RU_TAB2 = ['. И ', '. А ', '. Но ', '. Да ', '. Потом ', '. Также ', '. Снова ', '. Ещё '] as const;
+
+const GOROD: Theme = {
+  id: 'ГОРОД', model: 4096, rand: 0.86, tab1: RU_TAB1, tab2: RU_TAB2,
+  words: makeWords16x16(
+    ['город','район','улица','двор','парк','метро','маршрут','набережная','проспект','площадь','остановка','переход','квартал','рынок','сквер','вокзал'],
+    ['утро','вечер','центр','выход','дорога','пробка','магазин','фонарь','витрина','поворот','поток','перрон','крыльцо','подъезд','тротуар','перекрёсток'],
+  ),
+} as const;
+
+const RABOTA: Theme = {
+  id: 'РАБОТА', model: 4096, rand: 0.84, tab1: RU_TAB1, tab2: RU_TAB2,
+  words: makeWords16x16(
+    ['проект','задача','встреча','отчёт','команда','версия','план','срок','правка','бриф','письмо','звонок','договор','бюджет','релиз','итог'],
+    ['старт','черновик','финал','приоритет','контур','комментарий','вопрос','ответ','график','протокол','повестка','согласование','результат','статус','дедлайн','архив'],
+  ),
+} as const;
+
+const DOM: Theme = {
+  id: 'ДОМ', model: 4096, rand: 0.88, tab1: RU_TAB1, tab2: RU_TAB2,
+  words: makeWords16x16(
+    ['дом','кухня','комната','балкон','окно','полка','лампа','диван','чайник','шкаф','стирка','уборка','ремонт','ужин','доставка','выходной'],
+    ['утро','вечер','уют','порядок','список','плед','посуда','коридор','лестница','дверь','ключ','покупка','корзина','кастрюля','выпечка','тишина'],
+  ),
+} as const;
+
+const TRAVEL: Theme = {
+  id: 'ПУТЕШЕСТВИЕ', model: 4096, rand: 0.83, tab1: RU_TAB1, tab2: RU_TAB2,
+  words: makeWords16x16(
+    ['поездка','маршрут','билет','рейс','вокзал','перрон','багаж','чемодан','отель','карта','пересадка','посадка','экскурсия','берег','сувенир','бронь'],
+    ['утро','вечер','старт','фото','панорама','улица','терминал','паспорт','окно','салон','перелёт','переезд','траектория','привал','закат','открытка'],
+  ),
+} as const;
+
+const POGODA: Theme = {
+  id: 'ПОГОДА', model: 4096, rand: 0.9, tab1: RU_TAB1, tab2: RU_TAB2,
+  words: makeWords16x16(
+    ['погода','ветер','дождь','солнце','облако','туман','гроза','снег','рассвет','закат','сезон','прогноз','атмосфера','зонт','прохлада','давление'],
+    ['утро','вечер','день','ночь','капля','луч','порыв','тень','горизонт','осадки','температура','фронт','штиль','градус','апрель','ноябрь'],
+  ),
+} as const;
+
+const KULINARIYA: Theme = {
+  id: 'КУЛИНАРИЯ', model: 4096, rand: 0.87, tab1: RU_TAB1, tab2: RU_TAB2,
+  words: makeWords16x16(
+    ['рецепт','кухня','тесто','духовка','сковорода','специи','соус','бульон','салат','порция','завтрак','обед','ужин','десерт','выпечка','подача'],
+    ['утро','вечер','вкус','аромат','корочка','тарелка','нож','доска','сервировка','кипение','нарезка','маринад','добавка','гарнир','сладость','трава'],
+  ),
+} as const;
+
+
+
+const NARRATIVE: Theme = {
+  id: 'НАРРАТИВ',
+  model: 16384,
+  rand: 0.9,
+  tab1: [' и ', ' а ', ' но ', ' да ', ' потом ', ' также ', ' снова ', ' ещё ', ' будто ', ' словно ', ' когда ', ' если ', ' хотя ', ' потому ', ' зато ', ' однако '],
+  tab2: ['. И ', '. А ', '. Но ', '. Да ', '. Потом ', '. Также ', '. Снова ', '. Ещё ', '. Будто ', '. Словно ', '. Когда ', '. Если ', '. Хотя ', '. Потому ', '. Зато ', '. Однако '],
+  tab3: [' между ', ' рядом ', ' внутри ', ' вокруг ', ' после ', ' перед ', ' через ', ' мимо ', ' почти ', ' точно ', ' едва ', ' просто ', ' мягко ', ' тихо ', ' ровно ', ' будто бы '],
+  tab4: ['. Между ', '. Рядом ', '. Внутри ', '. Вокруг ', '. После ', '. Перед ', '. Через ', '. Мимо ', '. Почти ', '. Точно ', '. Едва ', '. Просто ', '. Мягко ', '. Тихо ', '. Ровно ', '. Будто бы '],
+  words: makeWords16x16(
+    ['история','разговор','память','мысль','деталь','момент','маршрут','пейзаж','голос','взгляд','движение','пауза','ритм','сюжет','контекст','акцент'],
+    ['утро','вечер','смысл','тон','образ','след','поворот','ответ','вопрос','оттенок','штрих','контур','узор','сцена','эпизод','финал'],
+  ),
+} as const;
 
 const BOZHE: Theme = {
   id: 'БОЖЕ',
@@ -305,7 +381,7 @@ const HEX: Theme = {
 } as const;
 
 /** All themes in detection priority order (hex MUST be last). */
-export const THEMES: readonly Theme[] = [KITAY, PATER, PUSHKIN, BOZHE, BUKHAYU, TRUMP, CYBER, MEME, ROSSIYA, SSSR, EMOJI, HEX] as const;
+export const THEMES: readonly Theme[] = [KITAY, PATER, PUSHKIN, NARRATIVE, GOROD, RABOTA, DOM, TRAVEL, POGODA, KULINARIYA, BOZHE, BUKHAYU, TRUMP, CYBER, MEME, ROSSIYA, SSSR, EMOJI, HEX] as const;
 
 /** Theme lookup by ID. */
 export const THEME_MAP: ReadonlyMap<ThemeId, Theme> = new Map(THEMES.map(t => [t.id, t]));
