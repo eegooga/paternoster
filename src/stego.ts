@@ -249,6 +249,69 @@ function decoder1024(s: string, tab: Theme): Uint8Array | null {
   return result;
 }
 
+
+
+// ── Model 16384: 14-bit encoding ────────────────────────
+// Structured mode: 64 connectors (6 bits) × 256 words (8 bits).
+function encoder16384(b: Uint8Array, tab: Theme): string {
+  const pad = (7 - ((b.length + 1) % 7)) % 7;
+  const padded = new Uint8Array(1 + b.length + pad);
+  padded[0] = pad;
+  padded.set(b, 1);
+
+  const connectors = [...tab.tab1!, ...tab.tab2!, ...tab.tab3!, ...tab.tab4!];
+  const words = tab.words!.split(' ');
+  let o = '';
+  let first = true;
+
+  for (let i = 0; i < padded.length; i += 7) {
+    const chunk = ((BigInt(padded[i]) << 48n) | (BigInt(padded[i + 1]) << 40n) | (BigInt(padded[i + 2]) << 32n)
+      | (BigInt(padded[i + 3]) << 24n) | (BigInt(padded[i + 4]) << 16n) | (BigInt(padded[i + 5]) << 8n) | BigInt(padded[i + 6]));
+    const t1 = Number((chunk >> 42n) & 0x3FFFn);
+    const t2 = Number((chunk >> 28n) & 0x3FFFn);
+    const t3 = Number((chunk >> 14n) & 0x3FFFn);
+    const t4 = Number(chunk & 0x3FFFn);
+    for (const t of [t1, t2, t3, t4]) {
+      if (first) { o += words[t & 0xFF][0].toUpperCase() + words[t & 0xFF].slice(1); first = false; }
+      else o += connectors[(t >> 8) & 0x3F] + words[t & 0xFF];
+    }
+  }
+  return o;
+}
+
+function decoder16384(s: string, tab: Theme): Uint8Array | null {
+  const connectors = [...tab.tab1!, ...tab.tab2!, ...tab.tab3!, ...tab.tab4!];
+  const connectorLookup = new Map<string, number>();
+  for (let i = 0; i < connectors.length; i++) connectorLookup.set(connectors[i].trim().replace(/^[.,;:!?—–\-]+|[.,;:!?—–\-]+$/g, '').trim(), i);
+  const words = tab.words!.split(' ');
+  const wordLookup = new Map<string, number>();
+  for (let i = 0; i < words.length; i++) wordLookup.set(words[i], i);
+
+  const tokens14: number[] = [];
+  let pending = -1; let first = true;
+  for (const raw of s.split(/\s+/)) {
+    const clean = raw.replace(/^[.,;:!?—–\-]+|[.,;:!?—–\-]+$/g, '');
+    if (!clean) continue;
+    const ci = connectorLookup.get(clean);
+    if (ci !== undefined) { pending = ci; continue; }
+    let wi = wordLookup.get(clean);
+    if (wi === undefined && clean.length) wi = wordLookup.get(clean[0].toLowerCase() + clean.slice(1));
+    if (wi === undefined) break;
+    if (first) { tokens14.push(wi); first = false; }
+    else { if (pending < 0) return null; tokens14.push((pending << 8) | wi); pending = -1; }
+  }
+
+  if (tokens14.length === 0 || tokens14.length % 4 !== 0) return null;
+  const out: number[] = [];
+  for (let i = 0; i < tokens14.length; i += 4) {
+    const chunk = (BigInt(tokens14[i]) << 42n) | (BigInt(tokens14[i + 1]) << 28n) | (BigInt(tokens14[i + 2]) << 14n) | BigInt(tokens14[i + 3]);
+    out.push(Number((chunk >> 48n) & 0xFFn), Number((chunk >> 40n) & 0xFFn), Number((chunk >> 32n) & 0xFFn), Number((chunk >> 24n) & 0xFFn), Number((chunk >> 16n) & 0xFFn), Number((chunk >> 8n) & 0xFFn), Number(chunk & 0xFFn));
+  }
+  const pad = out[0];
+  if (pad > 6 || out.length < 1 + pad) return null;
+  return new Uint8Array(out.slice(1, out.length - pad));
+}
+
 // ── Model 4096: 12-bit encoding ─────────────────────────
 // Flat mode (КИТАЙ): base+offset sequential CJK characters.
 // Structured mode (БОЖЕ): 16 connectors (4 bits) × 256 words (8 bits).
@@ -370,8 +433,8 @@ function decoder4096(s: string, tab: Theme): Uint8Array | null {
 type Encoder = (b: Uint8Array, tab: Theme) => string;
 type Decoder = (s: string, tab: Theme) => Uint8Array | null;
 
-const ENCODERS: Record<number, Encoder> = { 0: encoder0, 16: encoder16, /* 64: encoder64, */ 1024: encoder1024, 4096: encoder4096 };
-const DECODERS: Record<number, Decoder> = { 0: decoder0, 16: decoder16, /* 64: decoder64, */ 1024: decoder1024, 4096: decoder4096 };
+const ENCODERS: Record<number, Encoder> = { 0: encoder0, 16: encoder16, /* 64: encoder64, */ 1024: encoder1024, 4096: encoder4096, 16384: encoder16384 };
+const DECODERS: Record<number, Decoder> = { 0: decoder0, 16: decoder16, /* 64: decoder64, */ 1024: decoder1024, 4096: decoder4096, 16384: decoder16384 };
 
 /** Encode bytes to themed steganographic text. */
 export function stegoEncode(bytes: Uint8Array, themeId: ThemeId): string {
