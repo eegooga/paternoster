@@ -1,6 +1,6 @@
 /** Theme definitions for steganographic encoding. */
 
-export type ThemeId = 'БОЖЕ' | 'РОССИЯ' | 'СССР' | 'БУХАЮ' | 'КИТАЙ' | 'hex' | 'PATER' | '🙂' | 'TRUMP' | 'CYBER' | 'MEME' | 'ПУШКИН' | 'ГОРОД' | 'РАБОТА' | 'ДОМ' | 'ПУТЕШЕСТВИЕ' | 'ПОГОДА' | 'КУЛИНАРИЯ' | 'НАРРАТИВ';
+export type ThemeId = 'БОЖЕ' | 'РОССИЯ' | 'СССР' | 'БУХАЮ' | 'КИТАЙ' | 'hex' | 'PATER' | '🙂' | 'TRUMP' | 'CYBER' | 'MEME' | 'ПУШКИН' | 'ГОРОД' | 'ПОГОДА' | 'КУЛИНАРИЯ' | 'НАРРАТИВ';
 
 export interface Theme {
   readonly id: ThemeId;
@@ -69,29 +69,8 @@ const GOROD: Theme = {
   ),
 } as const;
 
-const RABOTA: Theme = {
-  id: 'РАБОТА', model: 4096, rand: 0.84, tab1: RU_TAB1, tab2: RU_TAB2,
-  words: makeWords16x16(
-    ['проект','задача','встреча','отчёт','команда','версия','план','срок','правка','бриф','письмо','звонок','договор','бюджет','релиз','итог'],
-    ['старт','черновик','финал','приоритет','контур','комментарий','вопрос','ответ','график','протокол','повестка','согласование','результат','статус','дедлайн','архив'],
-  ),
-} as const;
 
-const DOM: Theme = {
-  id: 'ДОМ', model: 4096, rand: 0.88, tab1: RU_TAB1, tab2: RU_TAB2,
-  words: makeWords16x16(
-    ['дом','кухня','комната','балкон','окно','полка','лампа','диван','чайник','шкаф','стирка','уборка','ремонт','ужин','доставка','выходной'],
-    ['утро','вечер','уют','порядок','список','плед','посуда','коридор','лестница','дверь','ключ','покупка','корзина','кастрюля','выпечка','тишина'],
-  ),
-} as const;
 
-const TRAVEL: Theme = {
-  id: 'ПУТЕШЕСТВИЕ', model: 4096, rand: 0.83, tab1: RU_TAB1, tab2: RU_TAB2,
-  words: makeWords16x16(
-    ['поездка','маршрут','билет','рейс','вокзал','перрон','багаж','чемодан','отель','карта','пересадка','посадка','экскурсия','берег','сувенир','бронь'],
-    ['утро','вечер','старт','фото','панорама','улица','терминал','паспорт','окно','салон','перелёт','переезд','траектория','привал','закат','открытка'],
-  ),
-} as const;
 
 const POGODA: Theme = {
   id: 'ПОГОДА', model: 4096, rand: 0.9, tab1: RU_TAB1, tab2: RU_TAB2,
@@ -412,7 +391,7 @@ const HEX: Theme = {
 } as const;
 
 /** All themes in detection priority order (hex MUST be last). */
-export const THEMES: readonly Theme[] = [KITAY, PATER, PUSHKIN, NARRATIVE, GOROD, RABOTA, DOM, TRAVEL, POGODA, KULINARIYA, BOZHE, BUKHAYU, TRUMP, CYBER, MEME, ROSSIYA, SSSR, EMOJI, HEX] as const;
+export const THEMES: readonly Theme[] = [KITAY, PATER, PUSHKIN, NARRATIVE, GOROD, POGODA, KULINARIYA, BOZHE, BUKHAYU, TRUMP, CYBER, MEME, ROSSIYA, SSSR, EMOJI, HEX] as const;
 
 /** Theme lookup by ID. */
 export const THEME_MAP: ReadonlyMap<ThemeId, Theme> = new Map(THEMES.map(t => [t.id, t]));
